@@ -1,7 +1,19 @@
 <script setup>
 import { useRouter } from "vue-router";
 import RegisterForm from "./partials/RegisterForm.vue";
+import { useAuthStore } from "../../store/auth/authstore";
+
 const router = useRouter();
+const { registrarse } = useAuthStore();
+
+const registro = async (e) => {
+  try {
+    const response = await registrarse(e);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>
 
 <template>
@@ -35,7 +47,7 @@ const router = useRouter();
         </div>
         <h1 class="text-2xl mb-5 m-5">Crear cuenta</h1>
         <div class="m-5">
-          <RegisterForm />
+          <RegisterForm @form:registro="registro" />
         </div>
       </div>
     </div>

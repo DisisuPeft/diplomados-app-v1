@@ -1,5 +1,6 @@
 <script setup>
 import Header from "./partials/Header.vue";
+import { useAuthStore } from "../store/auth/authstore";
 </script>
 
 <template>

@@ -1,6 +1,12 @@
 <script setup>
-import Main from "./pages/Main.vue";
-import Header from "./pages/partials/Header.vue";
+import { onMounted } from "vue";
+import { useAuthStore } from "./store/auth/authstore";
+
+const { checkUsuario } = useAuthStore();
+
+onMounted(() => {
+  checkUsuario();
+});
 </script>
 
 <template>

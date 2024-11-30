@@ -72,7 +72,15 @@ const maxWidthClass = computed(() => {
     <transition leave-active-class="duration-200">
       <div
         v-show="show"
-        class="fixed inset-0 overflow-y-auto px-4 py-16 sm:px-0 z-50"
+        :class="[
+          'fixed',
+          'inset-0',
+          'overflow-y-auto',
+          'px-4',
+          'py-[300px]',
+          'sm:px-0',
+          'z-50',
+        ]"
         scroll-region
       >
         <transition
@@ -92,8 +100,8 @@ const maxWidthClass = computed(() => {
               :class="[
                 'absolute',
                 'inset-0',
-                transparent ? 'bg-gray-700' : 'bg-gray-200',
-                'blur-2xl',
+                transparent ? 'bg-gray-800' : 'bg-gray-200',
+                transparent ? '' : 'blur-2xl',
                 'opacity-75',
               ]"
             />
