@@ -2,10 +2,11 @@
 import { onMounted } from "vue";
 import { useAuthStore } from "./store/auth/authstore";
 
-const { checkUsuario } = useAuthStore();
+const { checkUsuario, isAuth } = useAuthStore();
 
 onMounted(() => {
-  checkUsuario();
+  // checkUsuario();
+  // console.log(isAuth);
 });
 </script>
 

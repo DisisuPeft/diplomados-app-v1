@@ -2,16 +2,27 @@
 import { useRouter } from "vue-router";
 import RegisterForm from "./partials/RegisterForm.vue";
 import { useAuthStore } from "../../store/auth/authstore";
+import { message, Toast } from "../../alerts/alerts";
+import { ref } from "vue";
+import Loader from "../../components/Loader.vue";
 
 const router = useRouter();
 const { registrarse } = useAuthStore();
+const resetForm = ref(false);
+const setVisible = ref(false);
 
 const registro = async (e) => {
+  setVisible.value = true;
   try {
     const response = await registrarse(e);
-    console.log(response);
+    // console.log(response);
+    Toast(message(response), "success");
+    resetForm.value = true;
+    router.push("/");
   } catch (error) {
-    console.log(error);
+    Toast(message(error), "error");
+  } finally {
+    setVisible.value = false;
   }
 };
 </script>
@@ -47,9 +58,10 @@ const registro = async (e) => {
         </div>
         <h1 class="text-2xl mb-5 m-5">Crear cuenta</h1>
         <div class="m-5">
-          <RegisterForm @form:registro="registro" />
+          <RegisterForm @form:registro="registro" :reset="resetForm" />
         </div>
       </div>
     </div>
   </div>
+  <Loader :visible="setVisible" />
 </template>

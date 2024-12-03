@@ -38,13 +38,14 @@ watch(
   }
 );
 
-const emit = defineEmits(["form:registro"]);
+const emit = defineEmits(["form:login"]);
+
 const submit = () => {
   let formData = new FormData();
   for (let i in form.value) {
     formData.append(i, form.value[i]);
   }
-  emit("form:registro", formData);
+  emit("form:login", formData);
 };
 
 const resetForm = () => {
@@ -67,7 +68,7 @@ const resetForm = () => {
 
 <template>
   <form @submit.prevent="submit">
-    <div>
+    <!-- <div>
       <InputLabel for="name" value="Nombre" />
 
       <TextInput
@@ -90,7 +91,7 @@ const resetForm = () => {
         autoComplete="apellidoP"
         required
       />
-    </div>
+    </div> -->
 
     <div>
       <InputLabel for="email" value="Email" />
@@ -120,7 +121,7 @@ const resetForm = () => {
       />
     </div>
 
-    <div>
+    <!-- <div>
       <InputLabel for="password_confirmation" value="Confirmar contraseña" />
 
       <TextInput
@@ -132,7 +133,7 @@ const resetForm = () => {
         autoComplete="new-password"
         required
       />
-    </div>
+    </div> -->
     <!-- {/* quitarrr!!!! */}
       {/* <div className="mt-4">
         <InputLabel htmlFor="type_user" value="Rol de usuario"/> -->
@@ -148,7 +149,7 @@ const resetForm = () => {
     <!-- </div> */} -->
     <div className="flex items-center justify-end mt-4">
       <PrimaryButton className="ms-4" :disabled="processing">
-        Registrar
+        Ingresar
       </PrimaryButton>
     </div>
   </form>
