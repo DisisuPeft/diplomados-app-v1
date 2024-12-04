@@ -10,6 +10,9 @@ export const useAuthStore = defineStore('authentication', {
     getters: {
         getPerfil(state){
             return state.user 
+        },
+        getRole(state){
+            return state.user.roleID[0].id
         }
     },
     actions: {
@@ -25,6 +28,7 @@ export const useAuthStore = defineStore('authentication', {
             try {
                 const res = await login(credentials)
                 await this.checkUsuario()
+                await this.getUsuario()
                 if(res.status === 200 || 201){
                     return res.data
                 }
@@ -55,6 +59,7 @@ export const useAuthStore = defineStore('authentication', {
             try {
                 await logout()
                 this.isAuth = false
+                this.user = null
                 localStorage.clear()
             } catch (error) {
                 throw error

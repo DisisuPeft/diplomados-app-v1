@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from "vue-router";
 import { GuestRoutes } from "./guest-routes/guest";
 import { useAuthStore } from "../store/auth/authstore";
 import { AuthRoutes } from "./authenticated/authenticate";
+import { AdminRoutes } from "./authenticated/Admin/adminRoutes";
 // aqui importar tienda mas adelante
 
 const routes = [
     ...GuestRoutes,
-    ...AuthRoutes
+    ...AuthRoutes,
+    ...AdminRoutes
 ] //aqui anadir las rutas mas adelante
 
 export const router = createRouter({
@@ -15,14 +17,19 @@ export const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth){
-        const authStore = useAuthStore()
-        const auth = authStore.isAuth
-        if (auth){
-            next();
-        }else{
-            next('/')
+    const authStore = useAuthStore()
+    if (to.meta.requiresAuth){            
+        if (!authStore.isAuth){
+            return next('/')
         }
+        if(to.meta.roles){
+            // console.log(authStore)
+            const userRole = authStore.getRole
+            if(!to.meta.roles.includes(userRole)){
+                return next('/unauthorized')
+            }
+        }
+        return next()
     }else {
         next()
     }

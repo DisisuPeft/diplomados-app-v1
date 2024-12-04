@@ -3,16 +3,9 @@ import { onMounted, ref } from "vue";
 
 defineProps({
   modelValue: {
-    type: [String, Number, null],
-    default: "",
-    // validator: (value) => {
-    //   // Opcional: Validación de rango para edad
-    //   if (value !== null && value !== "") {
-    //     const numValue = Number(value);
-    //     return numValue >= 0 && numValue <= 120;
-    //   }
-    //   return true;
-    // },
+    type: Number,
+    required: true,
+    default: 0,
   },
 });
 
@@ -37,6 +30,7 @@ defineExpose({ focus: () => input.value.focus() });
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
     ref="input"
+    type="number"
   />
 </template>
 

@@ -77,7 +77,7 @@ const maxWidthClass = computed(() => {
           'inset-0',
           'overflow-y-auto',
           'px-4',
-          'py-[300px]',
+          transparent ? 'py-[300px]' : 'py-10',
           'sm:px-0',
           'z-50',
         ]"

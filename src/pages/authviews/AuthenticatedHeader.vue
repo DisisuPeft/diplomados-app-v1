@@ -1,13 +1,19 @@
 <script setup>
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useAuthStore } from "../../store/auth/authstore";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import LogoutButton from "../../components/LogoutButton.vue";
+// import { useRouter } from "vue-router";
 
-const { getPerfil } = useAuthStore();
+const router = useRouter();
+const { getPerfil, getRole } = useAuthStore();
 const showingNavigation = ref(false);
 const showMenuDropdown = ref(false);
+
+const user = computed(() => getPerfil);
+const userRole = computed(() => getRole);
+// console.log(userRole.value);
 // const currentTab = ref("Dashboard")
 // onMounted(async () => {
 //   try {
@@ -36,8 +42,8 @@ const showMenuDropdown = ref(false);
       <!-- Header con nombre de usuario -->
       <div class="flex items-center justify-center h-16 bg-sky-500">
         <span v-if="!showingNavigation" class="text-white font-bold uppercase">
-          {{ getPerfil.profile?.nombre ?? "Sin nombre" }}
-          {{ getPerfil.profile?.apellidoP ?? "Sin apellido" }}
+          {{ user.profile?.nombre ?? "Sin nombre" }}
+          {{ user.profile?.apellidoP ?? "Sin apellido" }}
         </span>
       </div>
 
@@ -85,50 +91,47 @@ const showMenuDropdown = ref(false);
               </button>
             </li>
 
-            <!-- Administrador (solo para tipo de usuario 1) -->
-            <!-- <li v-if="user.type_user?.id === 1">
-                <button
-                  class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-[230px]"
-                  @click="showMenuDropdown = !showMenuDropdown"
-                >
-                  <Icon :path="mdiAccountTie" :size="1.5" />
-                  <p class="ml-2">Administrador</p>
-                </button>
+            <li v-if="userRole === 1">
+              <button
+                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-[230px]"
+                @click="showMenuDropdown = !showMenuDropdown"
+              >
+                <p class="ml-2">Administrador</p>
+              </button>
 
-                <div
-                  :class="[
-                    showMenuDropdown
-                      ? 'flex justify-center'
-                      : 'w-full overflow-hidden transition-[height] duration-300 hidden',
-                  ]"
-                >
-                  <div class="hs-accordion-group ps-3 pt-2">
-                    <ul> -->
-            <!-- Usuarios -->
-            <!-- <li class="hs-accordion" id="users-accordion-sub-1">
-                        <router-link
-                          :to="{ name: 'admin.usuarios' }"
-                          class="flex items-center px-4 py-2 mt-2 rounded-full w-[230px] text-gray-700 hover:bg-sky-500 hover:text-white"
-                        >
-                          <Icon :path="mdiAccountGroupOutline" :size="1.5" />
-                          <p class="ml-2">Usuarios</p>
-                        </router-link>
-                      </li> -->
+              <div
+                :class="[
+                  showMenuDropdown
+                    ? 'flex justify-center'
+                    : 'w-full overflow-hidden transition-[height] duration-300 hidden',
+                ]"
+              >
+                <div class="hs-accordion-group ps-3 pt-2">
+                  <ul>
+                    <!-- Usuarios -->
+                    <li class="hs-accordion" id="users-accordion-sub-1">
+                      <button
+                        @click="router.push('/admin/usuarios')"
+                        class="flex items-center px-4 py-2 mt-2 rounded-full w-[230px] text-gray-700 hover:bg-sky-500 hover:text-white"
+                      >
+                        <p class="ml-2">Usuarios</p>
+                      </button>
+                    </li>
 
-            <!-- Configuración -->
-            <!-- <li>
-                        <router-link
+                    <!-- Configuración -->
+                    <li>
+                      <!-- <router-link
                           :to="{ name: 'admin.configuracion' }"
                           class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-[230px]"
-                        >
-                          <Icon :path="mdiCog" :size="1.5" />
-                          <p class="ml-2">Configuración</p>
-                        </router-link>
-                      </li> -->
-            <!-- </ul>
-                  </div>
+                        > -->
+
+                      <p class="ml-2">Configuración</p>
+                      <!-- </router-link> -->
+                    </li>
+                  </ul>
                 </div>
-              </li> -->
+              </div>
+            </li>
           </ul>
         </nav>
       </div>

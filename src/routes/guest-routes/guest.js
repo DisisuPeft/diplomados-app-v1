@@ -10,5 +10,5 @@ export const GuestRoutes = [
     {
         path: '/auth/login',
         component: () => import('../../pages/auth/Login.vue')
-    }
+    },
 ]
