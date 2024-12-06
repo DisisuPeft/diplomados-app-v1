@@ -15,8 +15,9 @@ defineProps({
     class="bg-white text-center w-48 rounded-2xl h-14 relative text-black text-xl font-semibold border-4 border-white group"
   >
     <div
-      class="bg-white rounded-xl h-12 w-1/4 grid place-items-center absolute left-0 top-0 group-hover:w-full z-10 duration-500"
+      class="bg-white rounded-xl h-12 w-1/4 grid place-items-center absolute left-0 top-0 z-10 duration-500"
     >
+      <!-- group-hover:w-full -->
       <svg
         width="25px"
         height="25px"

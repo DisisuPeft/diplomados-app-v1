@@ -23,8 +23,8 @@ const signin = async (e) => {
     resetForm.value = true;
     router.push("/dashboard");
   } catch (error) {
-    console.log(error);
-    Toast(message(error), "error");
+    // console.log(error);
+    Toast(message(error.response.data), "error");
   } finally {
     setVisible.value = false;
   }

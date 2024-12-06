@@ -19,21 +19,22 @@ const props = defineProps({
     type: Object,
   },
 });
-
+// Las password las voy a manejar en un componente aparte, igual creo que el email
 const form = ref({
+  id: props.selected ? props.selected.id : null,
   nombre: props.selected ? props.selected.profile.nombre : "",
-  apellidoP: "",
-  apellidoM: "",
-  edad: null,
-  fechaNacimiento: "",
-  genero: "",
-  nivEdu: "",
-  telefono: "",
-  email: "",
+  apellidoP: props.selected ? props.selected.profile.apellidoP : "",
+  apellidoM: props.selected ? props.selected.profile.apellidoM : "",
+  edad: props.selected ? props.selected.profile.edad : null,
+  fechaNacimiento: props.selected ? props.selected.profile.fechaNacimiento : "",
+  genero: props.selected ? props.selected.profile.genero : "",
+  nivEdu: props.selected ? props.selected.profile.nivEdu : null,
+  telefono: props.selected ? props.selected.profile.telefono : "",
+  email: props.selected ? props.selected.email : "",
   password: "",
-  password_confirmation: "",
-  role: null,
+  role: props.selected ? props.selected.roleID.map((role) => role.id) : [],
 });
+// console.log(form.value);
 const show = ref(false);
 const processing = ref(false);
 const roles = ref([
@@ -44,8 +45,18 @@ const roles = ref([
 const generos = ref([
   { id: 1, name: "Femenino" },
   { id: 2, name: "Masculino" },
-  { id: 3, name: "Prefiero no especificar" },
+  { id: 3, name: "No especificar" },
 ]);
+
+const nivelesEducativos = [
+  { id: 1, nombre: "Preescolar" },
+  { id: 2, nombre: "Primaria" },
+  { id: 3, nombre: "Secundaria" },
+  { id: 4, nombre: "Preparatoria" },
+  { id: 5, nombre: "Licenciatura" },
+  { id: 6, nombre: "Maestría" },
+  { id: 7, nombre: "Doctorado" },
+];
 
 watch(
   () => props.reset,
@@ -60,10 +71,11 @@ const emit = defineEmits(["form:user"]);
 
 const submit = () => {
   let formData = new FormData();
+  let type = props.selected ? "edit" : "create";
   for (let i in form.value) {
     formData.append(i, form.value[i]);
   }
-  emit("form:user", formData);
+  emit("form:user", [formData, type]);
 };
 
 const resetForm = () => {
@@ -71,18 +83,17 @@ const resetForm = () => {
     nombre: "",
     apellidoP: "",
     apellidoM: "",
-    edad: null,
-    fechaNacimiento: "",
+    edad: 0,
+    fechaNacimiento: "000/00/00",
     genero: "",
-    nivelEdu: "",
+    nivEdu: 0,
     telefono: "",
     email: "",
     password: "",
-    password_confirmation: "",
-    role: null,
+    role: [],
   };
 };
-// console.log(props.selected);
+// console.log(form.value);
 </script>
 
 <template>
@@ -99,6 +110,20 @@ const resetForm = () => {
         required
       />
     </div>
+
+    <!-- <div>
+      <InputLabel for="password_confirmation" value="Confirmar contraseña" />
+
+      <TextInput
+        id="password_confirmation"
+        type="password"
+        name="password_confirmation"
+        v-model="form.password_confirmation"
+        class="mt-1 block w-full"
+        autoComplete="new-password"
+        required
+      />
+    </div> -->
     <div>
       <InputLabel for="apellido" value="Primer apellido" />
 
@@ -120,6 +145,32 @@ const resetForm = () => {
         v-model="form.apellidoM"
         class="mt-1 block w-full"
         autoComplete="apellidoM"
+      />
+    </div>
+    <div>
+      <InputLabel for="email" value="Email" />
+
+      <TextInput
+        id="email"
+        type="email"
+        name="email"
+        v-model="form.email"
+        class="mt-1 block w-full"
+        autoComplee="username"
+        required
+      />
+    </div>
+
+    <div>
+      <InputLabel for="password" value="Contraseña" />
+
+      <TextInput
+        id="password"
+        type="password"
+        name="password"
+        v-model="form.password"
+        class="mt-1 block w-full"
+        autoComplete="new-password"
       />
     </div>
     <div>
@@ -147,28 +198,36 @@ const resetForm = () => {
       />
     </div>
     <div className="mt-4">
-      <InputLabel for="rol" value="Rol de usuario" />
+      <InputLabel for="rol" value="Genero" />
 
-      <select
+      <!-- <select
         v-model="form.genero"
         class="border-2 w-full mt-1 block p-2 border-gray-300"
       >
         <option value="">Seleccione una opción</option>
-        <option v-for="genero in generos" :key="genero.name">
+        <option v-for="genero in generos" :key="genero.name" :value="genero.id">
           {{ genero.name }}
         </option>
-      </select>
+      </select> -->
+      <v-select
+        :items="generos"
+        item-value="id"
+        item-title="name"
+        v-model="form.genero"
+      >
+      </v-select>
     </div>
     <div>
       <InputLabel for="nivel" value="Nivel educativo" />
 
-      <TextInput
-        id="nivel"
-        name="nivel"
+      <v-select
+        :items="nivelesEducativos"
+        item-title="nombre"
+        item-value="id"
         v-model="form.nivEdu"
-        class="mt-1 block w-full"
-        autoComplete="nivel"
-      />
+        chips
+      >
+      </v-select>
     </div>
     <div>
       <InputLabel for="telefono" value="Telefono" />
@@ -181,64 +240,37 @@ const resetForm = () => {
         autoComplete="telefono"
       />
     </div>
-    <div>
-      <InputLabel for="email" value="Email" />
-
-      <TextInput
-        id="email"
-        type="email"
-        name="email"
-        v-model="form.email"
-        class="mt-1 block w-full"
-        autoComplee="username"
-        required
-      />
-    </div>
-
-    <div>
-      <InputLabel for="password" value="Contraseña" />
-
-      <TextInput
-        id="password"
-        type="password"
-        name="password"
-        v-model="form.password"
-        class="mt-1 block w-full"
-        autoComplete="new-password"
-        required
-      />
-    </div>
-
-    <div>
-      <InputLabel for="password_confirmation" value="Confirmar contraseña" />
-
-      <TextInput
-        id="password_confirmation"
-        type="password"
-        name="password_confirmation"
-        v-model="form.password_confirmation"
-        class="mt-1 block w-full"
-        autoComplete="new-password"
-        required
-      />
-    </div>
 
     <div className="mt-4">
       <InputLabel for="type_user" value="Rol de usuario" />
 
-      <select
+      <!-- <select
         v-model="form.role"
+        multiple
         class="border-2 w-full mt-1 block p-2 border-gray-300"
       >
         <option value="">Seleccione una opción</option>
-        <option v-for="role in roles" :key="role.id">{{ role.name }}</option>
-      </select>
+        <option v-for="role in roles" :key="role.id" :value="role.id">
+          {{ role.name }}
+        </option>
+      </select> -->
+      <v-select
+        multiple
+        :items="roles"
+        item-title="name"
+        item-value="id"
+        v-model="form.role"
+        chips
+      ></v-select>
     </div>
     <div className="flex items-center justify-end mt-4">
       <PrimaryButton className="ms-4" :disabled="processing">
-        Registrar
+        {{ props.selected ? "Editar" : "Crear" }}
       </PrimaryButton>
     </div>
   </form>
+  <!-- <div class="flex justify-center">
+    <p>In</p>
+  </div> -->
   <Loader :visible="show"></Loader>
 </template>

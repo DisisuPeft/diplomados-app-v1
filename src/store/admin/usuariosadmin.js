@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getUsuariosAdmin } from "../../services/adminservices";
+import { getUsuariosAdmin, updateUsers } from "../../services/adminservices";
 import { Toast } from "../../alerts/alerts";
 
 export const useUsuariosAdmin = defineStore('adminusuarios', {
@@ -18,6 +18,14 @@ export const useUsuariosAdmin = defineStore('adminusuarios', {
                 this.usuarios = res
             } catch (error) {
                 console.log(error)
+                throw error
+            }
+        },
+        async UpdateUsers(data){
+            try {
+                const res = await updateUsers(data)
+                return res
+            } catch (error) {
                 throw error
             }
         }

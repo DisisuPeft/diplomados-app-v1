@@ -11,3 +11,14 @@ export const getUsuariosAdmin = async () => {
         throw error        
     }
 }
+
+export const updateUsers = async (data) => {
+    try {
+        const response = await api.patch('admin/usuarios/editar/', data)
+        if (response.status === 200 || 201) {
+            return response.data
+        }
+    } catch (error) {
+        throw error
+    }
+}

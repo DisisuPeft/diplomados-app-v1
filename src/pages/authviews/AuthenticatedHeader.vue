@@ -154,7 +154,7 @@ const userRole = computed(() => getRole);
 
         <!-- Botón de cerrar sesión -->
         <div class="flex items-center pr-10 p-[10px]">
-          <LogoutButton />
+          <LogoutButton>Logout</LogoutButton>
         </div>
       </div>
 

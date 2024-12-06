@@ -38,7 +38,7 @@ const logout = async () => {
     <div
       class="absolute right-5 transform translate-x-full opacity-0 text-white text-lg font-semibold transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
     >
-      Logout
+      <slot />
     </div>
   </button>
   <Loader :visible="setVisible" />

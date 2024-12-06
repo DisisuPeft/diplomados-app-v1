@@ -20,10 +20,8 @@ const router = useRouter();
   <!-- flex flex-col h-auto -->
   <div class="flex flex-col h-auto">
     <header>
-      <nav
-        class="w-full bg-white shadow-lg py-2 dark:bg-body-dark z-20 h-[110px] fixed"
-      >
-        <div class="container mx-auto flex justify-start items-center mt-1">
+      <nav class="w-full bg-white shadow-lg py-2 dark:bg-body-dark z-20 fixed">
+        <div class="container mx-auto flex justify-start items-center">
           <div class="flex-shrink-0 ml-2 ma-4">
             <div class="text-center text-gray-800 mt-1">
               <div>

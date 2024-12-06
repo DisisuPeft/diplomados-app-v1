@@ -15,9 +15,9 @@ api.interceptors.response.use(
     if (error.response) {
       // Específicamente para código 401 con tokens en cookies
       if (error.response.status === 401) {
+        Toast('Su sesión ha expirado. Por favor, inicie sesión nuevamente.', 'warning');
         localStorage.clear()
         router.push('/auth/login');
-        Toast('Su sesión ha expirado. Por favor, inicie sesión nuevamente.', 'warning');
       } else {
         Toast('Ha ocurrido un error. Por favor, intente nuevamente.', 'error');
       }
