@@ -47,8 +47,13 @@ onMounted(async () => {
   <AuthenticatedHeader>
     <TableUsuarios @row="selected" />
     <div class="flex justify-end p-4 mr-[100px]">
-      <SecondaryButton title="Crear usuario"></SecondaryButton>
+      <!-- <SecondaryButton
+        title="Crear usuario"
+        @click="show = true"
+      ></SecondaryButton> -->
+      <button></button>
     </div>
+    <!-- MODAL -->
     <Modal :show="show">
       <!-- <section class="grid grid-rows-1">
         <div class="flex justify-start p-4">

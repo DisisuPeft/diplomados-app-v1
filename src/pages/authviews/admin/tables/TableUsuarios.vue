@@ -65,7 +65,9 @@ const selectRow = (row) => {
             {{ user.email ?? "N/A" }}
           </td>
           <td class="border border-slate-700 p-4">
-            {{ user.roleID[0]?.name ?? "N/A" }}
+            <div v-for="role in user.roleID" :key="role.id">
+              {{ role.name }}
+            </div>
           </td>
         </tr>
       </tbody>

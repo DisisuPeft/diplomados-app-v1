@@ -27,7 +27,7 @@ const form = ref({
   apellidoM: props.selected ? props.selected.profile.apellidoM : "",
   edad: props.selected ? props.selected.profile.edad : null,
   fechaNacimiento: props.selected ? props.selected.profile.fechaNacimiento : "",
-  genero: props.selected ? props.selected.profile.genero : "",
+  genero: props.selected ? props.selected.profile.genero : null,
   nivEdu: props.selected ? props.selected.profile.nivEdu : null,
   telefono: props.selected ? props.selected.profile.telefono : "",
   email: props.selected ? props.selected.email : "",
@@ -42,7 +42,7 @@ const roles = ref([
   { id: 2, name: "Docente" },
   { id: 3, name: "Estudiante" },
 ]);
-const generos = ref([
+let generos = ref([
   { id: 1, name: "Femenino" },
   { id: 2, name: "Masculino" },
   { id: 3, name: "No especificar" },
@@ -84,7 +84,7 @@ const resetForm = () => {
     apellidoP: "",
     apellidoM: "",
     edad: 0,
-    fechaNacimiento: "000/00/00",
+    fechaNacimiento: "",
     genero: "",
     nivEdu: 0,
     telefono: "",
@@ -94,6 +94,7 @@ const resetForm = () => {
   };
 };
 // console.log(form.value);
+console.log(props.selected);
 </script>
 
 <template>
@@ -200,22 +201,22 @@ const resetForm = () => {
     <div className="mt-4">
       <InputLabel for="rol" value="Genero" />
 
-      <!-- <select
+      <select
         v-model="form.genero"
-        class="border-2 w-full mt-1 block p-2 border-gray-300"
+        class="w-full mt-1 block p-4 border border-gray-800"
       >
         <option value="">Seleccione una opción</option>
         <option v-for="genero in generos" :key="genero.name" :value="genero.id">
           {{ genero.name }}
         </option>
-      </select> -->
-      <v-select
+      </select>
+      <!-- <v-select
         :items="generos"
-        item-value="id"
-        item-title="name"
         v-model="form.genero"
+        item-title="name"
+        item-value="id"
       >
-      </v-select>
+      </v-select> -->
     </div>
     <div>
       <InputLabel for="nivel" value="Nivel educativo" />
