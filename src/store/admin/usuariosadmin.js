@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getUsuariosAdmin, updateUsers } from "../../services/adminservices";
+import { createUsers, getUsuariosAdmin, updateUsers } from "../../services/adminservices";
 import { Toast } from "../../alerts/alerts";
 
 export const useUsuariosAdmin = defineStore('adminusuarios', {
@@ -12,6 +12,14 @@ export const useUsuariosAdmin = defineStore('adminusuarios', {
         }
     },
     actions: {
+        async crearUser(data){
+            try {
+                const res = await createUsers(data);
+                return res
+            } catch (error) {
+                throw error
+            }
+        },
         async getUsersAdmin(){
             try {
                 const res = await getUsuariosAdmin()

@@ -14,7 +14,10 @@ const selectRow = (row) => {
 </script>
 
 <template>
-  <div class="flex justify-center">
+  <section
+    class="flex items-center justify-center max-w-[90%] bg-white shadow-xl rounded-md"
+  >
+    <!-- <div class="flex justify-center"> -->
     <table class="border-collapse border border-slate-500">
       <thead>
         <tr>
@@ -72,5 +75,6 @@ const selectRow = (row) => {
         </tr>
       </tbody>
     </table>
-  </div>
+    <!-- </div> -->
+  </section>
 </template>

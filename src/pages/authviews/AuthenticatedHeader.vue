@@ -1,16 +1,18 @@
 <script setup>
 import { computed, onMounted } from "vue";
 import { useAuthStore } from "../../store/auth/authstore";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, watch, watchEffect } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import LogoutButton from "../../components/LogoutButton.vue";
+import { onBeforeRouteUpdate } from "vue-router";
 // import { useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 const { getPerfil, getRole } = useAuthStore();
-const showingNavigation = ref(false);
+const showingNavigation = ref(true);
 const showMenuDropdown = ref(false);
-
+const switch_icon = ref("mdi mdi-chevron-down mr-2");
 const user = computed(() => getPerfil);
 const userRole = computed(() => getRole);
 // console.log(userRole.value);
@@ -27,106 +29,191 @@ const userRole = computed(() => getRole);
 //   //   const user = localStorage.getItem("user");
 //   //   console.log(JSON.parse(user));
 // });
+watch(showMenuDropdown, (value) => {
+  if (value) {
+    // console.log(value);
+    switch_icon.value = "mdi mdi-chevron-up mr-2";
+  } else {
+    // console.log(value);
+    return (switch_icon.value = "mdi mdi-chevron-down mr-2");
+  }
+});
+// onBeforeRouteUpdate((to, from) => {
+//   console.log("Cambio de ruta detectado:");
+//   console.log("Ruta anterior:", from.path);
+//   console.log("Ruta nueva:", to.path);
+// });
+// console.log(route);
 </script>
 
 <template>
   <div class="flex h-screen bg-gray-100">
     <!-- Sidebar -->
-    <div
+    <!-- <div
       :class="[
         showingNavigation
           ? 'hidden transition-transform transform -translate-x-full ease-in-out duration-300'
-          : 'flex flex-col w-64 bg-white',
+          : 'flex flex-col w-[180px] bg-white',
+      ]"
+    > -->
+    <div
+      :class="[
+        showingNavigation
+          ? 'w-[70px] transition-transform transform ease-in-out duration-300 shadow-xl'
+          : 'flex flex-col w-[200px] bg-white shadow-xl',
       ]"
     >
       <!-- Header con nombre de usuario -->
-      <div class="flex items-center justify-center h-16 bg-sky-500">
-        <span v-if="!showingNavigation" class="text-white font-bold uppercase">
+      <div class="flex items-center justify-center h-[62px] shadow-xl">
+        <!-- <span
+          v-if="!showingNavigation"
+          class="text-white font-bold uppercase text-center"
+        >
           {{ user.profile?.nombre ?? "Sin nombre" }}
           {{ user.profile?.apellidoP ?? "Sin apellido" }}
-        </span>
+        </span> -->
+        <div class="flex items-center px-4">
+          <!-- class="text-gray-500 focus:outline-none focus:text-gray-700" -->
+          <!-- <v-btn
+            icon="mdi-menu"
+            @click="showingNavigation = !showingNavigation"
+          > -->
+          <!-- <Icon :path="mdiMenu" :size="1.5" /> -->
+          <!-- </v-btn> -->
+          <v-btn
+            density="compact"
+            elevation="0"
+            icon="mdi-menu"
+            @click="showingNavigation = !showingNavigation"
+          ></v-btn>
+        </div>
       </div>
 
       <!-- Menú de navegación -->
       <div class="flex flex-col flex-1 overflow-y-auto">
         <nav class="flex-1 px-2 py-4">
           <ul class="space-y-1.5">
-            <!-- Perfil -->
             <li>
+              <!-- <template v-if="showingNavigation"> -->
               <button
-                class="flex items-center px-4 py-2 mt-2 rounded-full w-[230px] text-gray-700 hover:bg-sky-500 hover:text-white"
+                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-full"
+                @click="
+                  router.push(
+                    `/university/${
+                      user.profile?.nombre + user.profile?.apellidoP
+                    }/${user.id}`
+                  )
+                "
               >
-                <!-- <Icon :path="mdiAccountSchool" :size="1.5" /> -->
-                <p class="ml-2">Perfil</p>
+                <template v-if="showingNavigation">
+                  <div class="">
+                    <i class="mdi mdi-account text-2xl text-center"></i>
+                  </div>
+                  <!-- <p class="ml-2">Calificaciones</p> -->
+                </template>
+                <template v-else-if="!showingNavigation">
+                  <i class="mdi mdi-account"></i>
+                  <p class="ml-2">Perfil</p>
+                </template>
               </button>
+              <!-- </template> -->
             </li>
-
-            <!-- Calificaciones -->
-            <li>
+            <!-- <li>
               <button
-                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-[230px]"
+                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-full"
               >
-                <!-- <Icon :path="mdiSchool" :size="1.5" /> -->
                 <p class="ml-2">Calificaciones</p>
               </button>
             </li>
-
-            <!-- Calendario -->
             <li>
               <button
-                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-[230px]"
+                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-full"
               >
-                <!-- <Icon :path="mdiCalendarMonth" :size="1.5" /> -->
                 <p class="ml-2">Calendario</p>
               </button>
-            </li>
-
-            <!-- Preferencias -->
+            </li> -->
             <li>
               <button
-                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-[230px]"
+                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-full"
               >
-                <!-- <Icon :path="mdiCog" :size="1.5" /> -->
-                <p class="ml-2">Preferencias</p>
+                <template v-if="showingNavigation">
+                  <div class="">
+                    <i class="mdi mdi-cog text-2xl text-center"></i>
+                  </div>
+                  <!-- <p class="ml-2">Calificaciones</p> -->
+                </template>
+                <template v-else-if="!showingNavigation">
+                  <i class="mdi mdi-cog"></i>
+                  <p class="ml-2">Preferencias</p>
+                </template>
               </button>
             </li>
 
             <li v-if="userRole === 1">
               <button
-                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-[230px]"
+                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-full"
                 @click="showMenuDropdown = !showMenuDropdown"
               >
-                <p class="ml-2">Administrador</p>
+                <template v-if="showingNavigation">
+                  <div class="">
+                    <i class="mdi mdi-account-cog text-2xl"></i>
+                    <!-- <img
+                      src="../../assets/user.png"
+                      class="h-[20px] w-[20px]"
+                      alt="user"
+                    /> -->
+                  </div>
+                  <!-- <p class="ml-2">Calificaciones</p> -->
+                </template>
+                <template v-else-if="!showingNavigation">
+                  <div class="flex items-center">
+                    <i :class="switch_icon"></i>
+                    <span>Administrador</span>
+                  </div>
+                </template>
               </button>
 
               <div
                 :class="[
                   showMenuDropdown
-                    ? 'flex justify-center'
-                    : 'w-full overflow-hidden transition-[height] duration-300 hidden',
+                    ? 'flex flex-col w-full bg-white'
+                    : 'w-[200px] overflow-hidden transition-[height] duration-300 hidden',
                 ]"
               >
-                <div class="hs-accordion-group ps-3 pt-2">
+                <div class="ps-3 pt-2">
                   <ul>
-                    <!-- Usuarios -->
-                    <li class="hs-accordion" id="users-accordion-sub-1">
+                    <li class="" id="">
                       <button
+                        title="Usuarios"
                         @click="router.push('/admin/usuarios')"
-                        class="flex items-center px-4 py-2 mt-2 rounded-full w-[230px] text-gray-700 hover:bg-sky-500 hover:text-white"
+                        class="flex items-center justify-center px-4 py-2 mt-2 rounded-full w-full text-gray-700 hover:bg-sky-500 hover:text-white"
                       >
-                        <p class="ml-2">Usuarios</p>
+                        <template v-if="showingNavigation">
+                          <i class="mdi mdi-account-group text-xl"></i>
+                          <!-- <p class="ml-2">Usuarios</p> -->
+                        </template>
+                        <template v-else-if="!showingNavigation">
+                          <i class="mdi mdi-account-group text-xl"></i>
+                          <p class="ml-2">Usuarios</p>
+                        </template>
                       </button>
                     </li>
 
-                    <!-- Configuración -->
-                    <li>
-                      <!-- <router-link
-                          :to="{ name: 'admin.configuracion' }"
-                          class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-[230px]"
-                        > -->
-
-                      <p class="ml-2">Configuración</p>
-                      <!-- </router-link> -->
+                    <li class="hs-accordion" id="">
+                      <button
+                        @click="router.push('/admin/usuarios')"
+                        class="flex items-center justify-center px-4 py-2 mt-2 rounded-full w-full text-gray-700 hover:bg-sky-500 hover:text-white"
+                      >
+                        <template v-if="showingNavigation">
+                          <i class="mdi mdi-cog text-xl"></i>
+                          <!-- <p class="ml-2">Usuarios</p> -->
+                        </template>
+                        <template v-else-if="!showingNavigation">
+                          <i class="mdi mdi-cog text-xl"></i>
+                          <p class="ml-2">Configuración</p>
+                        </template>
+                        <!-- <p class="ml-2">Configuración</p> -->
+                      </button>
                     </li>
                   </ul>
                 </div>
@@ -143,15 +230,40 @@ const userRole = computed(() => getRole);
       <div
         class="flex items-center justify-between h-16 bg-white border-b border-gray-200 shadow-lg"
       >
-        <div class="flex items-center px-4">
-          <button
-            class="text-gray-500 focus:outline-none focus:text-gray-700"
+        <!-- <div class="flex items-center px-4"> -->
+        <!-- class="text-gray-500 focus:outline-none focus:text-gray-700" -->
+        <!-- <v-btn
+            icon="mdi-menu"
             @click="showingNavigation = !showingNavigation"
-          >
-            <!-- <Icon :path="mdiMenu" :size="1.5" /> -->
-          </button>
+          > -->
+        <!-- <Icon :path="mdiMenu" :size="1.5" /> -->
+        <!-- </v-btn> -->
+        <!-- <v-btn
+            density="compact"
+            elevation="0"
+            icon="mdi-menu"
+            @click="showingNavigation = !showingNavigation"
+          ></v-btn>
+        </div> -->
+        <div class="hidden md:flex flex-grow justify-start ml-10">
+          <ul class="flex space-x-8">
+            <li>
+              <router-link
+                class="text-black hover:decoration-blue-500 transition duration-300 text-lg"
+                :to="'/dashboard'"
+              >
+                Inicio
+              </router-link>
+            </li>
+            <li>
+              <!-- <button
+                  class="text-black hover:text-blue-400 transition duration-300 text-lg"
+                >
+                  Cursos
+                </button> -->
+            </li>
+          </ul>
         </div>
-
         <!-- Botón de cerrar sesión -->
         <div class="flex items-center pr-10 p-[10px]">
           <LogoutButton>Logout</LogoutButton>

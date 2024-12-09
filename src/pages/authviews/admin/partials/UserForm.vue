@@ -9,6 +9,7 @@ import TextInput from "../../../../components/TextInput.vue";
 import InputLabel from "../../../../components/InputLabel.vue";
 import PrimaryButton from "../../../../components/PrimaryButton.vue";
 import NumberInput from "../../../../components/NumberInput.vue";
+import { generos, roles, nivelesEducativos } from "../../../../js/Arraydata";
 
 const props = defineProps({
   reset: {
@@ -22,41 +23,23 @@ const props = defineProps({
 // Las password las voy a manejar en un componente aparte, igual creo que el email
 const form = ref({
   id: props.selected ? props.selected.id : null,
-  nombre: props.selected ? props.selected.profile.nombre : "",
-  apellidoP: props.selected ? props.selected.profile.apellidoP : "",
-  apellidoM: props.selected ? props.selected.profile.apellidoM : "",
-  edad: props.selected ? props.selected.profile.edad : null,
-  fechaNacimiento: props.selected ? props.selected.profile.fechaNacimiento : "",
-  genero: props.selected ? props.selected.profile.genero : null,
-  nivEdu: props.selected ? props.selected.profile.nivEdu : null,
-  telefono: props.selected ? props.selected.profile.telefono : "",
-  email: props.selected ? props.selected.email : "",
+  nombre: props.selected ? props.selected?.profile?.nombre : "",
+  apellidoP: props.selected ? props.selected?.profile?.apellidoP : "",
+  apellidoM: props.selected ? props.selected?.profile?.apellidoM : "",
+  edad: props.selected ? props.selected?.profile?.edad : null,
+  fechaNacimiento: props.selected
+    ? props.selected?.profile?.fechaNacimiento
+    : "",
+  genero: props.selected ? props.selected?.profile?.genero : null,
+  nivEdu: props.selected ? props.selected?.profile?.nivEdu : null,
+  telefono: props.selected ? props.selected?.profile?.telefono : "",
+  email: props.selected ? props.selected?.email : "",
   password: "",
-  role: props.selected ? props.selected.roleID.map((role) => role.id) : [],
+  role: props.selected ? props.selected?.roleID?.map((role) => role.id) : [],
 });
 // console.log(form.value);
 const show = ref(false);
 const processing = ref(false);
-const roles = ref([
-  { id: 1, name: "Administrador" },
-  { id: 2, name: "Docente" },
-  { id: 3, name: "Estudiante" },
-]);
-let generos = ref([
-  { id: 1, name: "Femenino" },
-  { id: 2, name: "Masculino" },
-  { id: 3, name: "No especificar" },
-]);
-
-const nivelesEducativos = [
-  { id: 1, nombre: "Preescolar" },
-  { id: 2, nombre: "Primaria" },
-  { id: 3, nombre: "Secundaria" },
-  { id: 4, nombre: "Preparatoria" },
-  { id: 5, nombre: "Licenciatura" },
-  { id: 6, nombre: "Maestría" },
-  { id: 7, nombre: "Doctorado" },
-];
 
 watch(
   () => props.reset,
@@ -71,7 +54,7 @@ const emit = defineEmits(["form:user"]);
 
 const submit = () => {
   let formData = new FormData();
-  let type = props.selected ? "edit" : "create";
+  let type = Object.keys(props.selected).length !== 0 ? "edit" : "create";
   for (let i in form.value) {
     formData.append(i, form.value[i]);
   }
@@ -94,7 +77,7 @@ const resetForm = () => {
   };
 };
 // console.log(form.value);
-console.log(props.selected);
+// console.log(Object.keys(props.selected).length === 0);
 </script>
 
 <template>
@@ -266,7 +249,7 @@ console.log(props.selected);
     </div>
     <div className="flex items-center justify-end mt-4">
       <PrimaryButton className="ms-4" :disabled="processing">
-        {{ props.selected ? "Editar" : "Crear" }}
+        {{ Object.keys(props.selected).length !== 0 ? "Editar" : "Crear" }}
       </PrimaryButton>
     </div>
   </form>
