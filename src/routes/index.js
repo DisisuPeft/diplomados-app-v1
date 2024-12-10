@@ -4,13 +4,17 @@ import { useAuthStore } from "../store/auth/authstore";
 import { AuthRoutes } from "./authenticated/authenticate";
 import { AdminRoutes } from "./authenticated/Admin/adminRoutes";
 import { ProfileRoutes } from "./authenticated/profile/Profile";
+import { TeacherRoutes } from "./authenticated/teacher/teacher";
+import { CoursesRoutes } from "./authenticated/courses/courses";
 // aqui importar tienda mas adelante
 
 const routes = [
     ...GuestRoutes,
     ...AuthRoutes,
     ...AdminRoutes,
-    ...ProfileRoutes
+    ...ProfileRoutes,
+    ...TeacherRoutes,
+    ...CoursesRoutes
 ] //aqui anadir las rutas mas adelante
 
 export const router = createRouter({

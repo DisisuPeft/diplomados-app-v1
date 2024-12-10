@@ -1,169 +1,70 @@
-<script setup></script>
+<script setup>
+import Modal from "../../../components/Modal.vue";
+
+const props = defineProps({
+  visible: {
+    type: Boolean,
+  },
+});
+
+const emit = defineEmits(["modal:update"]);
+</script>
 
 <template>
-  <div class="container">
-    <div class="modal">
-      <div class="modal__header">
-        <span class="modal__title">Nuevo Curso</span
-        ><button class="button button--icon">
-          <svg
-            width="24"
-            viewBox="0 0 24 24"
-            height="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path fill="none" d="M0 0h24v24H0V0z"></path>
-            <path
-              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
-            ></path>
-          </svg>
-        </button>
-      </div>
-      <div class="modal__body">
-        <div class="input">
-          <label class="input__label">Project title</label>
-          <input class="input__field" type="text" />
-          <p class="input__description">
-            The title must contain a maximum of 32 characters
-          </p>
-        </div>
-        <div class="input">
-          <label class="input__label">Description</label>
-          <textarea class="input__field input__field--textarea"></textarea>
-          <p class="input__description">
-            Give your project a good description so everyone know what's it for
-          </p>
-        </div>
-      </div>
-      <div class="modal__footer">
-        <button class="button button--primary">Create project</button>
+  <Modal :show="visible">
+    <!-- <div class="absolute inset-0 flex items-center justify-center p-6">
+      <div
+        class="w-full max-w-[900px] bg-white rounded-lg flex flex-col shadow-md"
+      > -->
+    <div
+      class="px-6 py-4 border-b border-gray-200 flex items-center justify-between p-10"
+    >
+      <span class="font-bold text-xl">Nuevo programa educativo</span>
+      <div>
+        <v-btn
+          icon="mdi-close"
+          elevation="0"
+          @click="emit('modal:update', false)"
+        ></v-btn>
       </div>
     </div>
-  </div>
+    <div class="p-4">
+      <div class="flex flex-col">
+        <div class="flex flex-col mb-7">
+          <label class="font-bold text-sm mb-2">Nombre</label>
+          <input
+            type="text"
+            class="block mt-2 border border-gray-300 rounded-md px-3 py-3 transition ease-in-out focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:ring-opacity-25"
+          />
+        </div>
+        <div class="flex flex-col mb-7">
+          <label class="font-bold text-sm mb-2">Descripcion</label>
+          <textarea
+            class="block mt-2 border border-gray-300 rounded-md px-3 py-3 min-h-[100px] max-w-full transition ease-in-out focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:ring-opacity-25"
+          ></textarea>
+          <p class="text-sm mt-2 text-gray-500">
+            Una breve descripcion del programa educativo
+          </p>
+        </div>
+        <div class="flex flex-col mb-7">
+          <label class="font-bold text-sm mb-2">Categoria</label>
+          <select
+            type="text"
+            class="block mt-2 border border-gray-300 rounded-md px-3 py-3 transition ease-in-out focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:ring-opacity-25"
+          ></select>
+        </div>
+      </div>
+    </div>
+    <div class="px-6 pb-6">
+      <button
+        class="inline-flex items-center justify-center bg-blue-600 text-white px-5 py-3 rounded-md text-sm font-medium hover:bg-blue-700 transition ease-in-out"
+      >
+        Crear programa
+      </button>
+    </div>
+    <!-- </div>
+    </div> -->
+  </Modal>
 </template>
 
-<style>
-.button {
-  appaerance: none;
-  font: inherit;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
-.container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-}
-
-.modal {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 500px;
-  background-color: #fff;
-  box-shadow: 0 15px 30px 0 rgba(0, 125, 171, 0.15);
-  border-radius: 10px;
-}
-
-.modal__header {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.modal__body {
-  padding: 1rem 1rem;
-}
-
-.modal__footer {
-  padding: 0 1.5rem 1.5rem;
-}
-
-.modal__title {
-  font-weight: 700;
-  font-size: 1.25rem;
-}
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.15s ease;
-}
-
-.button--icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  background-color: transparent;
-  border-radius: 0.25rem;
-}
-
-.button--icon:focus,
-.button--icon:hover {
-  background-color: #ededed;
-}
-
-.button--primary {
-  background-color: #007dab;
-  color: #fff;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.25rem;
-  font-weight: 500;
-  font-size: 0.875rem;
-}
-
-.button--primary:hover {
-  background-color: #006489;
-}
-
-.input {
-  display: flex;
-  flex-direction: column;
-}
-
-.input + .input {
-  margin-top: 1.75rem;
-}
-
-.input__label {
-  font-weight: 700;
-  font-size: 0.875rem;
-}
-
-.input__field {
-  display: block;
-  margin-top: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 0.25rem;
-  padding: 0.75rem 0.75rem;
-  transition: 0.15s ease;
-}
-
-.input__field:focus {
-  outline: none;
-  border-color: #007dab;
-  box-shadow: 0 0 0 1px #007dab, 0 0 0 4px rgba(0, 125, 171, 0.25);
-}
-
-.input__field--textarea {
-  min-height: 100px;
-  max-width: 100%;
-}
-
-.input__description {
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-  color: #8d8d8d;
-}
-</style>
+<style></style>

@@ -15,3 +15,20 @@ export const getPerfil = async (id) =>{
         throw error
     }
 }
+
+export const editProfile = (id, data) => {
+    // localStorage.removeItem("profile")
+    try {
+        const response = api.patch('users/myprofile/edit/', data, {
+            params: {
+                id: id
+            }
+        })
+        // console.log(response)
+        if(response.status === 200 || 201){
+            return response
+        }
+    } catch (error) {
+        throw error        
+    }
+}

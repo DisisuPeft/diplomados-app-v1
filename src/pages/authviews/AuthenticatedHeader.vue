@@ -64,7 +64,7 @@ watch(showMenuDropdown, (value) => {
       ]"
     >
       <!-- Header con nombre de usuario -->
-      <div class="flex items-center justify-center h-[62px] shadow-xl">
+      <div class="flex items-center ml-2 h-[62px] shadow-xl">
         <!-- <span
           v-if="!showingNavigation"
           class="text-white font-bold uppercase text-center"
@@ -96,7 +96,15 @@ watch(showMenuDropdown, (value) => {
             <li>
               <!-- <template v-if="showingNavigation"> -->
               <button
-                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-full"
+                :class="[
+                  'p-16-semibold flex size-full p-[10px] group font-semibold rounded-full bg-cover hover:bg-sky-100 hover:shadow-inner',
+                  $route.path ===
+                  `/university/${
+                    user.profile?.nombre + user.profile?.apellidoP
+                  }/${user.id}`
+                    ? 'bg-gradient-to-r from-sky-400 to-sky-600 text-white'
+                    : 'text-gray-700',
+                ]"
                 @click="
                   router.push(
                     `/university/${
@@ -104,12 +112,12 @@ watch(showMenuDropdown, (value) => {
                     }/${user.id}`
                   )
                 "
+                title="Perfil"
               >
                 <template v-if="showingNavigation">
                   <div class="">
-                    <i class="mdi mdi-account text-2xl text-center"></i>
+                    <i class="mdi mdi-account text-4xl text-center"></i>
                   </div>
-                  <!-- <p class="ml-2">Calificaciones</p> -->
                 </template>
                 <template v-else-if="!showingNavigation">
                   <i class="mdi mdi-account"></i>
@@ -132,13 +140,15 @@ watch(showMenuDropdown, (value) => {
                 <p class="ml-2">Calendario</p>
               </button>
             </li> -->
+            <!-- account-school -->
             <li>
               <button
-                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-full"
+                class="p-16-semibold flex size-full p-[10px] group font-semibold rounded-full bg-cover hover:bg-sky-100 hover:shadow-inner focus:bg-gradient-to-r from-sky-400 to-sky-600 focus:text-white text-gray-700 transition-all ease-linear"
+                title="Preferencias"
               >
                 <template v-if="showingNavigation">
                   <div class="">
-                    <i class="mdi mdi-cog text-2xl text-center"></i>
+                    <i class="mdi mdi-cog text-4xl text-center"></i>
                   </div>
                   <!-- <p class="ml-2">Calificaciones</p> -->
                 </template>
@@ -149,14 +159,44 @@ watch(showMenuDropdown, (value) => {
               </button>
             </li>
 
-            <li v-if="userRole === 1">
+            <li v-if="userRole === 1 || 2">
               <button
-                class="flex items-center px-4 py-2 mt-2 text-gray-700 hover:bg-sky-500 hover:text-white rounded-full w-full"
-                @click="showMenuDropdown = !showMenuDropdown"
+                :class="[
+                  'p-16-semibold flex size-full p-[10px] group font-semibold rounded-full bg-cover hover:bg-sky-100 hover:shadow-inner',
+                  $route.path === '/teacher'
+                    ? 'bg-gradient-to-r from-sky-400 to-sky-600 text-white'
+                    : 'text-gray-700',
+                ]"
+                title="Gestión Académica"
+                @click="router.push('/teacher')"
               >
                 <template v-if="showingNavigation">
                   <div class="">
-                    <i class="mdi mdi-account-cog text-2xl"></i>
+                    <i class="mdi mdi-account-school text-4xl text-start"></i>
+                  </div>
+                  <!-- <p class="ml-2">Calificaciones</p> -->
+                </template>
+                <template v-else-if="!showingNavigation">
+                  <i class="mdi mdi-account-school"></i>
+                  <p class="ml-2">Gestión Académica</p>
+                </template>
+              </button>
+            </li>
+
+            <li v-if="userRole === 1">
+              <button
+                :class="[
+                  'p-16-semibold flex size-full p-[9px] group font-semibold rounded-full bg-cover hover:bg-sky-100 hover:shadow-inner',
+                  showMenuDropdown
+                    ? 'bg-gradient-to-r from-sky-400 to-sky-600 text-white'
+                    : 'text-gray-700',
+                ]"
+                @click="showMenuDropdown = !showMenuDropdown"
+                title="Administrador"
+              >
+                <template v-if="showingNavigation">
+                  <div class="">
+                    <i class="mdi mdi-account-cog text-4xl"></i>
                     <!-- <img
                       src="../../assets/user.png"
                       class="h-[20px] w-[20px]"
@@ -176,20 +216,26 @@ watch(showMenuDropdown, (value) => {
               <div
                 :class="[
                   showMenuDropdown
-                    ? 'flex flex-col w-full bg-white'
+                    ? 'flex flex-col w-full bg-gray-300 rounded-lg mt-2'
                     : 'w-[200px] overflow-hidden transition-[height] duration-300 hidden',
                 ]"
               >
-                <div class="ps-3 pt-2">
+                <!-- text-gray-700 hover:bg-sky-500 hover: -->
+                <div class="pt-2">
                   <ul>
                     <li class="" id="">
                       <button
                         title="Usuarios"
                         @click="router.push('/admin/usuarios')"
-                        class="flex items-center justify-center px-4 py-2 mt-2 rounded-full w-full text-gray-700 hover:bg-sky-500 hover:text-white"
+                        :class="[
+                          'p-16-semibold flex size-full p-[15px] group font-semibold rounded-full bg-cover hover:bg-sky-100 hover:shadow-inner',
+                          $route.path === '/admin/usuarios'
+                            ? 'bg-gradient-to-r from-sky-400 to-sky-600 text-white'
+                            : 'text-gray-700',
+                        ]"
                       >
                         <template v-if="showingNavigation">
-                          <i class="mdi mdi-account-group text-xl"></i>
+                          <i class="mdi mdi-account-group text-2xl"></i>
                           <!-- <p class="ml-2">Usuarios</p> -->
                         </template>
                         <template v-else-if="!showingNavigation">
@@ -201,11 +247,11 @@ watch(showMenuDropdown, (value) => {
 
                     <li class="hs-accordion" id="">
                       <button
-                        @click="router.push('/admin/usuarios')"
-                        class="flex items-center justify-center px-4 py-2 mt-2 rounded-full w-full text-gray-700 hover:bg-sky-500 hover:text-white"
+                        @click="router.push('#')"
+                        class="p-16-semibold flex size-full p-[15px] group font-semibold rounded-full bg-cover hover:bg-sky-100 hover:shadow-inner focus:bg-gradient-to-r from-sky-400 to-sky-600 focus:text-white text-gray-700 transition-all ease-linear"
                       >
                         <template v-if="showingNavigation">
-                          <i class="mdi mdi-cog text-xl"></i>
+                          <i class="mdi mdi-cog text-2xl"></i>
                           <!-- <p class="ml-2">Usuarios</p> -->
                         </template>
                         <template v-else-if="!showingNavigation">
@@ -255,12 +301,13 @@ watch(showMenuDropdown, (value) => {
                 Inicio
               </router-link>
             </li>
-            <li>
-              <!-- <button
-                  class="text-black hover:text-blue-400 transition duration-300 text-lg"
-                >
-                  Cursos
-                </button> -->
+            <li v-if="userRole === 1 || 2 || 3">
+              <router-link
+                class="text-black hover:decoration-blue-500 transition duration-300 text-lg"
+                :to="'/courses'"
+              >
+                Cursos
+              </router-link>
             </li>
           </ul>
         </div>

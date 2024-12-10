@@ -5,7 +5,7 @@ export const Toast = (message, icon) => {
     position: "top-end",
     showConfirmButton: false,
     timerProgressBar: true,
-    timer: 5000,
+    timer: 4000,
     didOpen: (toast) => {
          toast.onmouseenter = Swal.stopTimer;
          toast.onmouseleave = Swal.resumeTimer;
