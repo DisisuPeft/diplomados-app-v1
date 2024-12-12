@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+
 export const Toast = (message, icon) => {
   const toast = Swal.mixin({
     toast: true,

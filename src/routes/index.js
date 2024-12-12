@@ -6,6 +6,7 @@ import { AdminRoutes } from "./authenticated/Admin/adminRoutes";
 import { ProfileRoutes } from "./authenticated/profile/Profile";
 import { TeacherRoutes } from "./authenticated/teacher/teacher";
 import { CoursesRoutes } from "./authenticated/courses/courses";
+import { SettingsRoutes } from "./authenticated/settings/settings";
 // aqui importar tienda mas adelante
 
 const routes = [
@@ -14,7 +15,8 @@ const routes = [
     ...AdminRoutes,
     ...ProfileRoutes,
     ...TeacherRoutes,
-    ...CoursesRoutes
+    ...CoursesRoutes,
+    ...SettingsRoutes
 ] //aqui anadir las rutas mas adelante
 
 export const router = createRouter({

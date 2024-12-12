@@ -141,24 +141,6 @@ watch(showMenuDropdown, (value) => {
               </button>
             </li> -->
             <!-- account-school -->
-            <li>
-              <button
-                class="p-16-semibold flex size-full p-[10px] group font-semibold rounded-full bg-cover hover:bg-sky-100 hover:shadow-inner focus:bg-gradient-to-r from-sky-400 to-sky-600 focus:text-white text-gray-700 transition-all ease-linear"
-                title="Preferencias"
-              >
-                <template v-if="showingNavigation">
-                  <div class="">
-                    <i class="mdi mdi-cog text-4xl text-center"></i>
-                  </div>
-                  <!-- <p class="ml-2">Calificaciones</p> -->
-                </template>
-                <template v-else-if="!showingNavigation">
-                  <i class="mdi mdi-cog"></i>
-                  <p class="ml-2">Preferencias</p>
-                </template>
-              </button>
-            </li>
-
             <li v-if="userRole === 1 || 2">
               <button
                 :class="[
@@ -179,6 +161,29 @@ watch(showMenuDropdown, (value) => {
                 <template v-else-if="!showingNavigation">
                   <i class="mdi mdi-account-school"></i>
                   <p class="ml-2">Gestión Académica</p>
+                </template>
+              </button>
+            </li>
+            <li>
+              <button
+                :class="[
+                  'p-16-semibold flex size-full p-[10px] group font-semibold rounded-full bg-cover hover:bg-sky-100 hover:shadow-inner',
+                  $route.path === '/preference'
+                    ? 'bg-gradient-to-r from-sky-400 to-sky-600 text-white'
+                    : 'text-gray-700',
+                ]"
+                @click="router.push('/preference')"
+                title="Preferencias"
+              >
+                <template v-if="showingNavigation">
+                  <div class="">
+                    <i class="mdi mdi-cog text-4xl text-center"></i>
+                  </div>
+                  <!-- <p class="ml-2">Calificaciones</p> -->
+                </template>
+                <template v-else-if="!showingNavigation">
+                  <i class="mdi mdi-cog"></i>
+                  <p class="ml-2">Preferencias</p>
                 </template>
               </button>
             </li>
@@ -310,6 +315,12 @@ watch(showMenuDropdown, (value) => {
               </router-link>
             </li>
           </ul>
+        </div>
+        <div class="flex items-center pr-10 p-[10px]">
+          <span class="text-gray-700 font-bold uppercase text-center">
+            {{ user.profile?.nombre ?? "Sin nombre" }}
+            {{ user.profile?.apellidoP ?? "Sin apellido" }}
+          </span>
         </div>
         <!-- Botón de cerrar sesión -->
         <div class="flex items-center pr-10 p-[10px]">

@@ -16,10 +16,12 @@ api.interceptors.response.use(
       // Específicamente para código 401 con tokens en cookies
       if (error.response.status === 401) {
         Toast('Su sesión ha expirado. Por favor, inicie sesión nuevamente.', 'warning');
-        localStorage.clear()
+        localStorage.removeItem('user')
+        localStorage.removeItem('profile')
+        localStorage.removeItem('auth')
         router.push('/auth/login');
       } else {
-        Toast('Ha ocurrido un error. Por favor, intente nuevamente.', 'error');
+        // Toast('Ha ocurrido un error. Por favor, intente nuevamente.', 'error');
       }
     }
     return Promise.reject(error);
