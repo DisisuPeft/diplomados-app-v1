@@ -2,16 +2,21 @@
 import AuthenticatedHeader from "../AuthenticatedHeader.vue";
 import CreateCurso from "./CreateCurso.vue";
 import { onMounted, ref } from "vue";
+import { useCategoryStore } from "../../../store/settings/categoryStore";
 
 const show = ref(false);
 const toggleCollapse = ref(false);
 const isOpen = ref(false);
+const categorystore = useCategoryStore();
+// const categorys = computed(() => categorystore.Categorys);
 
 const open = () => {
   toggleCollapse.value = !toggleCollapse.value;
   isOpen.value = true;
 };
-onMounted(() => {});
+onMounted(() => {
+  categorystore.getCategorias();
+});
 </script>
 
 <template>
@@ -59,11 +64,11 @@ onMounted(() => {});
           </button>
         </div>
         <div v-if="toggleCollapse" class="px-6 py-4 border-t">
-          <h3 class="text-lg font-medium">Card Title</h3>
-          <p>
+          <!-- <h3 class="text-lg font-medium">Card Title</h3> -->
+          <!-- <p>
             En esta parte pondre un tabla con los cursos existentes y filtros
             necesarios. Asi como una columna con operaciones, ver, eliminar
-          </p>
+          </p> -->
         </div>
       </div>
     </section>

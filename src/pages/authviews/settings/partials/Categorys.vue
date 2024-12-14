@@ -9,44 +9,55 @@ const props = defineProps({
   edit: {
     type: Boolean,
   },
+  modal: {
+    type: Boolean,
+  },
 });
 const store = useCategoryStore();
 const toggleCollapse = ref(false);
-const modal = ref(false);
+// const modal = ref(false);
 const headers = [
   { key: "name", title: "Nombre" },
   { key: "description", title: "Descripcion" },
   { key: "subcategory", title: "Subcategoria" },
-  { key: "subcategory[0].especification", title: "Especificaciones" },
-  { key: "actions", title: "Acciones" },
+  //{ key: "subcategory[0].especification", title: "Especificaciones" },
+  //{ key: "actions", title: "Acciones" },
 ];
 const categorys = computed(() => store.Categorys);
 // const edit = ref(false);
 const id = ref(null);
 const form = ref({
+  subcategory_id: null,
   nameCategory: "",
   description: "",
-  namesubCategory: [""],
+  namesubCategory: "",
   especification: [""],
 });
-const emit = defineEmits(["form:category", "edit:update"]);
+const emit = defineEmits(["form:category", "edit:update", "modal:edit"]);
 
-const editedItem = (category) => {
-  // edit.value = true;
+const editCategory = (category) => {
   emit("edit:update", true);
-  // console.log(category.subcategory.especification);
+  category.name !== null || ""
+    ? ((form.value.nameCategory = category.name),
+      (form.value.description = category.description))
+    : console.log("error");
+  id.value = category.id;
+  emit("modal:edit", true);
+};
+const editSubItemCategory = (category, subcategory) => {
+  // console.log(subcategory);
+  emit("edit:update", true);
   category.name !== null || ""
     ? ((form.value.nameCategory = category.name),
       (form.value.description = category.description),
-      (form.value.namesubCategory = category.subcategory.map((sub) => [
-        sub.name,
+      (form.value.namesubCategory = subcategory.name),
+      (form.value.especification = subcategory.especification.map((esp) => [
+        esp.name,
       ])),
-      (form.value.especification = category.subcategory[0].especification.map(
-        (esp) => [esp.name]
-      )))
+      (form.value.subcategory_id = subcategory.id))
     : console.log("error");
   id.value = category.id;
-  modal.value = true;
+  emit("modal:edit", true);
 };
 const deleteItem = (category) => {
   console.log(category);
@@ -71,7 +82,7 @@ const submit = () => {
     : emit("form:category", [formData, "create"]);
 };
 const close = () => {
-  modal.value = false;
+  emit("modal:edit", false);
   emit("edit:update", false);
 };
 watch(
@@ -79,7 +90,7 @@ watch(
   (newValue, oldValue) => {
     // console.log("New value:", newValue);
     // console.log("Old value:", oldValue);
-
+    // console.log(props.edit);
     // This will help you see the transition clearly
     if (!newValue) {
       const data = reset(form.value);
@@ -137,7 +148,7 @@ onMounted(() => {});
             color="primary"
             icon="mdi-plus"
             dark
-            @click="modal = true"
+            @click="emit('modal:edit', true)"
           ></v-btn>
         </div>
       </div>
@@ -150,7 +161,7 @@ onMounted(() => {});
           last-page-label="Todos"
         >
           <template v-slot:top>
-            <Modal :show="modal">
+            <Modal :show="props.modal">
               <div class="flex items-center justify-end p-2">
                 <v-btn icon="mdi-close" @click="close" elevation="0"></v-btn>
               </div>
@@ -172,30 +183,34 @@ onMounted(() => {});
                         label="Descripcion de la categoria"
                       ></v-textarea>
                     </v-col>
-                    <v-col
-                      v-for="(row, index) in form.namesubCategory"
-                      :key="index"
-                      cols="12"
-                      md="12"
-                      sm="6"
-                    >
+                    <div>
+                      <p
+                        class="text-2xl font-bold underline underline-offset-1 ml-2"
+                      >
+                        Subcategoria
+                      </p>
+                    </div>
+                    <!-- <div
+                      class="border-b-4 border-gray-700 h-[10px] w-full"
+                    ></div> -->
+                    <v-col cols="12" md="12" sm="6">
                       <v-text-field
                         ref="input"
                         variant="underlined"
-                        v-model="form.namesubCategory[index]"
+                        v-model="form.namesubCategory"
                         label="Subcategoria"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" md="5" sm="6">
-                      <v-btn
-                        class="mb-2"
-                        color="primary"
-                        icon="mdi-pencil-plus-outline"
-                        dark
-                        @click="addsub"
+                    <!-- <div
+                      class="border-b-4 border-gray-700 h-[10px] w-full"
+                    ></div> -->
+                    <div>
+                      <p
+                        class="text-2xl font-bold underline underline-offset-1 ml-2"
                       >
-                      </v-btn>
-                    </v-col>
+                        Especificaciones
+                      </p>
+                    </div>
                     <v-col
                       v-for="(row, index) in form.especification"
                       :key="index"
@@ -234,27 +249,69 @@ onMounted(() => {});
             <p>VACIO</p>
           </template>
           <template v-slot:item="{ item }">
-            <tr>
-              <td>{{ item.name }}</td>
-              <td>{{ item.description }}</td>
+            <tr class="border-gray-400 border-b-4">
               <td>
-                <div class="" v-for="c in item.subcategory" :key="c.id">
+                <!-- <v-chip
+                  selected-class="bg-sky-500 text-white"
+                  @click="editedItemCategory(item.name, item.description)"
+                > -->
+                {{ item.name }}
+                <!-- </v-chip> -->
+              </td>
+              <td>{{ item.description }}</td>
+              <td class="">
+                <!-- <div class="" v-for="c in item.subcategory" :key="c.id">
                   {{ c.name }}
+                </div> -->
+                <!-- <v-chip-group
+                  selected-class="bg-sky-500 text-white"
+                  class=""
+                  column
+                > -->
+                <!-- <v-chip
+
+                > -->
+                <div v-for="i in item.subcategory">
+                  <!-- <div>{{ i.name }}</div> -->
+                  <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-1 w-[250px]"> -->
+                  <div class="flex items-center justify-between p-2">
+                    <div class="w-[80%]">◉ {{ i.name }}</div>
+                    <div class="w-[20%]">
+                      <v-icon
+                        class="me-2 text-2xl"
+                        size="small"
+                        @click="editSubItemCategory(item, i)"
+                      >
+                        mdi-pencil
+                      </v-icon>
+                    </div>
+                  </div>
+                  <!-- </div> -->
                 </div>
+                <!-- </v-chip> -->
+                <!-- </v-chip-group> -->
               </td>
               <td>
-                <div
+                <!-- <div
                   v-for="a in item.subcategory[0].especification"
                   :key="a.id"
                 >
                   ◉ {{ a.name }}
-                </div>
+                </div> -->
+                <!-- <v-chip-group selected-class="text-primary" column>
+                  <v-chip
+                    v-for="a in item.subcategory[0].especification"
+                    :key="a"
+                  >
+                    {{ a.name }}
+                  </v-chip>
+                </v-chip-group> -->
               </td>
               <td>
                 <v-icon
                   class="me-2 text-4xl"
                   size="small"
-                  @click="editedItem(item)"
+                  @click="editCategory(item)"
                 >
                   mdi-pencil
                 </v-icon>

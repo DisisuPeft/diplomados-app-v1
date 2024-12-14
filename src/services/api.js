@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useAuthStore } from "../store/auth/authstore";
 import { Toast } from "../alerts/alerts";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 const api = axios.create({
     baseURL: 'http://localhost:8000/api/',
@@ -10,20 +10,35 @@ const api = axios.create({
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config
     const router = useRouter()
-    if (error.response) {
+    // if (error.response) {
       // Específicamente para código 401 con tokens en cookies
-      if (error.response.status === 401) {
-        Toast('Su sesión ha expirado. Por favor, inicie sesión nuevamente.', 'warning');
-        localStorage.removeItem('user')
-        localStorage.removeItem('profile')
-        localStorage.removeItem('auth')
-        router.push('/auth/login');
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true
+
+        try {
+          await api.post('auth/refresh/', {}, {
+            withCredentials: true
+          })
+          return api(originalRequest)
+        } catch (error) {
+          // await axios.post('logout/', {}, {
+          //   withCredentials: true
+          // })
+          Toast("La sesion expiro, sera redirigo para iniciar nuevamente sesion", "warning")
+          localStorage.clear()
+          setTimeout(() => {
+            window.location.href = '/'
+            router.replace('/')
+          }, 4000)
+          
+        }
       } else {
         // Toast('Ha ocurrido un error. Por favor, intente nuevamente.', 'error');
       }
-    }
+    // }
     return Promise.reject(error);
   }
 );

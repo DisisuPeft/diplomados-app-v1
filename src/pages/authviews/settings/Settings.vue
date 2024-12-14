@@ -7,6 +7,7 @@ import { Toast } from "../../../alerts/alerts";
 
 const categorystore = useCategoryStore();
 const edit = ref(false);
+const modalCategorys = ref(false);
 const toggleCollapse = ref(false);
 const getCategoryData = async () => {
   try {
@@ -20,7 +21,9 @@ const postCategory = async (e) => {
   // console.log(...e[0], e[1]);
   if (e[1] === "create") {
     try {
-      await categorystore.saveCategorias(e);
+      await categorystore.saveCategorias(e[0]);
+      // edit.value = false;
+      modalCategorys.value = false;
       Toast("Categorias creadas", "success");
     } catch (error) {
       // console.log(error);
@@ -29,6 +32,10 @@ const postCategory = async (e) => {
   } else if (e[1] === "edit") {
     try {
       await categorystore.updateCategorys(e[2], e[0]);
+      await categorystore.getCategorias();
+      edit.value = false;
+      modalCategorys.value = false;
+      Toast("Categorias actualizadas", "success");
     } catch (error) {
       Toast("Error al editar las categorias", "error");
     }
@@ -64,8 +71,10 @@ onMounted(() => {
     <section class="max-w-8xl mx-auto bg-white rounded-lg">
       <Categorys
         :edit="edit"
+        :modal="modalCategorys"
         @form:category="postCategory"
         @edit:update="edit = $event"
+        @modal:edit="modalCategorys = $event"
       />
     </section>
   </AuthenticatedHeader>

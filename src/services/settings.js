@@ -11,6 +11,7 @@ export const getCategorys = async () => {
     }
 }
 
+
 export const postCategorys = async (data) => {
     try {
         const response = await api.post('courses/category/create/', data)
